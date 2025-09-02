@@ -1,0 +1,502 @@
+{
+	"info": {
+		"_postman_id": "76437e3d-a3a1-4a61-8bc2-9343e25b1348",
+		"name": "moisture",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23044036"
+	},
+	"item": [
+		{
+			"name": "auth-service",
+			"item": [
+				{
+					"name": "signup",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"qi@qi.com\",\r\n  \"name\": \"qiadmin\",\r\n  \"password\": \"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://192.168.1.113:5001/api/v1/auth/signup",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"1",
+								"113"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"qi@qi.com\",\r\n  \"password\": \"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://192.168.1.113:5001/api/v1/auth/login",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"1",
+								"113"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "refresh",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzQ3NjQ2MjMzLCJleHAiOjE3NDgyNTEwMzN9.0Y7mcFm1wa6HbmOpUQMBacWU7RDYMM95MHvqyXBHNvM\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://192.168.1.113:5001/api/v1/auth/refresh",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"1",
+								"113"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"refresh"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "moisture-sensor",
+			"item": [
+				{
+					"name": "status",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzQ3NzA2NDU2LCJleHAiOjE3NDc3OTI4NTZ9.ZmYX6nURklKerd5XREo_xcNfM3sd_limJx7HVSxQsqQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://192.168.1.113:5004/api/v1/sensor/sensor-status",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"1",
+								"113"
+							],
+							"port": "5004",
+							"path": [
+								"api",
+								"v1",
+								"sensor",
+								"sensor-status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "sensor-data",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzQ3NzA2NDU2LCJleHAiOjE3NDc3OTI4NTZ9.ZmYX6nURklKerd5XREo_xcNfM3sd_limJx7HVSxQsqQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"queue\": \"my-queue-name\",\r\n  \"ins_lot\": \"LOT123\",\r\n  \"material\": \"Corn\",\r\n  \"batch\": \"BATCH001\",\r\n  \"plant\": \"PlantA\",\r\n  \"sample_no\": \"S001\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://192.168.1.113:5004/api/v1/sensor/sensor-start",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"1",
+								"113"
+							],
+							"port": "5004",
+							"path": [
+								"api",
+								"v1",
+								"sensor",
+								"sensor-start"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "data-service",
+			"item": [
+				{
+					"name": "results",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzQ3NzA2NDU2LCJleHAiOjE3NDc3OTI4NTZ9.ZmYX6nURklKerd5XREo_xcNfM3sd_limJx7HVSxQsqQ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://192.168.1.113:5002/api/v1/data/results",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"1",
+								"113"
+							],
+							"port": "5002",
+							"path": [
+								"api",
+								"v1",
+								"data",
+								"results"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "results_by_id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzQ3NzA2NDU2LCJleHAiOjE3NDc3OTI4NTZ9.ZmYX6nURklKerd5XREo_xcNfM3sd_limJx7HVSxQsqQ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://192.168.1.113:5002/api/v1/data/results/1",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"1",
+								"113"
+							],
+							"port": "5002",
+							"path": [
+								"api",
+								"v1",
+								"data",
+								"results",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "results_by_ins_lot",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzQ3NzA2NDU2LCJleHAiOjE3NDc3OTI4NTZ9.ZmYX6nURklKerd5XREo_xcNfM3sd_limJx7HVSxQsqQ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://192.168.1.113:5002/api/v1/data/results/LOT123",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"1",
+								"113"
+							],
+							"port": "5002",
+							"path": [
+								"api",
+								"v1",
+								"data",
+								"results",
+								"LOT123"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "results_by_queue",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzQ3NzA2NDU2LCJleHAiOjE3NDc3OTI4NTZ9.ZmYX6nURklKerd5XREo_xcNfM3sd_limJx7HVSxQsqQ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://192.168.1.113:5002/api/v1/data/results?queue=my-queue-name",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"1",
+								"113"
+							],
+							"port": "5002",
+							"path": [
+								"api",
+								"v1",
+								"data",
+								"results"
+							],
+							"query": [
+								{
+									"key": "queue",
+									"value": "my-queue-name"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "result_by_sample_no",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzQ3NzA2NDU2LCJleHAiOjE3NDc3OTI4NTZ9.ZmYX6nURklKerd5XREo_xcNfM3sd_limJx7HVSxQsqQ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://192.168.1.113:5002/api/v1/data/results?sample_no=S001",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"1",
+								"113"
+							],
+							"port": "5002",
+							"path": [
+								"api",
+								"v1",
+								"data",
+								"results"
+							],
+							"query": [
+								{
+									"key": "sample_no",
+									"value": "S001"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "interface-results",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzQ3NzA2NDU2LCJleHAiOjE3NDc3OTI4NTZ9.ZmYX6nURklKerd5XREo_xcNfM3sd_limJx7HVSxQsqQ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://192.168.1.113:5002/api/v1/data/interface-results",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"1",
+								"113"
+							],
+							"port": "5002",
+							"path": [
+								"api",
+								"v1",
+								"data",
+								"interface-results"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "interface-results_by_ins_lot",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzQ3NzA2NDU2LCJleHAiOjE3NDc3OTI4NTZ9.ZmYX6nURklKerd5XREo_xcNfM3sd_limJx7HVSxQsqQ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://192.168.1.113:5002/api/v1/data/interface-results?ins_lot=LOT123",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"1",
+								"113"
+							],
+							"port": "5002",
+							"path": [
+								"api",
+								"v1",
+								"data",
+								"interface-results"
+							],
+							"query": [
+								{
+									"key": "ins_lot",
+									"value": "LOT123"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "interface-results_by_sample_no",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzQ3NzA2NDU2LCJleHAiOjE3NDc3OTI4NTZ9.ZmYX6nURklKerd5XREo_xcNfM3sd_limJx7HVSxQsqQ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://192.168.1.113:5002/api/v1/data/interface-results?sample_no=S001",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"1",
+								"113"
+							],
+							"port": "5002",
+							"path": [
+								"api",
+								"v1",
+								"data",
+								"interface-results"
+							],
+							"query": [
+								{
+									"key": "sample_no",
+									"value": "S001"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

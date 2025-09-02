@@ -1,0 +1,111 @@
+version: "3.9"
+
+services:
+  # ---- Database ----
+  db:
+    image: postgres:15-alpine
+    container_name: cm_db
+    restart: always
+    env_file:
+      - ./.env
+    environment:
+      POSTGRES_DB:       "${DB_NAME}"
+      POSTGRES_USER:     "${DB_USER}"
+      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - corn-moisture-network
+
+  # ---- Auth Service ----
+  auth-service:
+    build:
+      context: ./services/auth-service
+    image: auth-service:latest
+    ports:
+      - "5001:5001"
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:5001/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: always
+    networks:
+      - corn-moisture-network
+
+  # ---- Data Service ----
+  data-service:
+    build:
+      context: ./services/data-service
+    image: data-service:latest
+    ports:
+      - "5002:5002"
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:5002/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: always
+    networks:
+      - corn-moisture-network
+
+  # ---- Moisture Sensor ----
+  moisture-sensor:
+    build:
+      context: ./services/moisture-sensor
+    image: moisture-sensor:latest
+    ports:
+      - "5004:5004"
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:5004/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: always
+    privileged: true
+    devices:
+      - "/dev/ttyUSB0:/dev/ttyUSB0"
+    networks:
+      - corn-moisture-network
+
+  # ---- Frontend ----
+  frontend:
+    build:
+      context: ./frontend/my-react-app
+      dockerfile: Dockerfile
+    image: moisture-sensor-fe:latest
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./.env
+    restart: always
+    depends_on:
+      - data-service
+      - auth-service
+      - moisture-sensor
+      - db
+    networks:
+      - corn-moisture-network
+        
+
+# volumes & networks
+volumes:
+  pgdata:
+
+networks:
+  corn-moisture-network:
+    driver: bridge

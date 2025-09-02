@@ -1,0 +1,77 @@
+# Stage 1: Build Stage
+FROM python:3.9-bullseye AS builder
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential libpq-dev libopenblas-dev cmake gfortran \
+    pkg-config python3-dev && \
+    rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+COPY requirements.txt ./
+
+# แยกไฟล์ requirements
+RUN echo "\
+numpy==1.22.4\n\
+scipy==1.7.3\n\
+scikit-learn==1.1.3\n\
+pandas==2.2.3\n" > requirements-sci.txt
+
+RUN echo "\
+annotated-types==0.7.0\n\
+anyio==4.6.2.post1\n\
+certifi==2024.8.30\n\
+charset-normalizer==3.4.0\n\
+click==8.1.7\n\
+colorama==0.4.6\n\
+fastapi==0.115.4\n\
+h11==0.14.0\n\
+idna==3.10\n\
+pydantic==2.9.2\n\
+pydantic_core==2.23.4\n\
+pyModbusTCP==0.3.0\n\
+python-dotenv==1.0.1\n\
+requests==2.32.3\n\
+sniffio==1.3.1\n\
+starlette==0.41.2\n\
+typing_extensions==4.12.2\n\
+urllib3==2.2.3\n\
+uvicorn==0.32.0\n\
+python-jose[cryptography]\n\
+SQLAlchemy==2.0.41\n\
+psycopg2-binary==2.9.10\n\
+minimalmodbus==2.1.1\n" > requirements-base.txt
+
+# ตั้งค่าตัวแปรให้ pip
+ENV PIP_NO_CACHE_DIR=1 \
+    PIP_DEFAULT_TIMEOUT=180 \
+    PIP_RESUME_RETRIES=5
+
+# สร้าง venv แล้วติดตั้ง dependencies
+RUN python -m venv /venv && \
+    /venv/bin/pip install --upgrade pip && \
+    /venv/bin/pip install --prefer-binary -r requirements-base.txt && \
+    /venv/bin/pip install --prefer-binary --only-binary=:all: \
+        --timeout $PIP_DEFAULT_TIMEOUT \
+        --resume-retries $PIP_RESUME_RETRIES \
+        -r requirements-sci.txt \
+        --extra-index-url https://www.piwheels.org/simple
+
+# Stage 2: Final Image
+FROM python:3.9-bullseye
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libpq5 \
+    libatlas-base-dev && \
+    rm -rf /var/lib/apt/lists/*
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PATH="/venv/bin:$PATH"
+
+COPY --from=builder /venv /venv
+COPY . /app
+COPY app/best_model/best_model_rf.pkl /app/app/best_model/best_model_rf.pkl
+
+WORKDIR /app
+
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "5004"]

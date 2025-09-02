@@ -1,0 +1,42 @@
+# Stage 1: Build Stage
+FROM python:3.9-bullseye as builder
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    libpq-dev \
+    libopenblas-dev \
+    cmake \
+    gfortran \                
+    pkg-config \
+    python3-dev \
+ && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+COPY requirements.txt ./
+
+RUN python -m venv /venv && \
+    /venv/bin/pip install --upgrade pip && \
+    /venv/bin/pip install --prefer-binary --no-cache-dir -r requirements.txt
+
+# Stage 2: Final Image
+FROM python:3.9-bullseye
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libpq5 \
+    libopenblas0 \
+ && rm -rf /var/lib/apt/lists/*
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PATH="/venv/bin:$PATH"
+
+COPY --from=builder /venv /venv
+WORKDIR /app
+COPY . .
+
+EXPOSE 5004
+
+RUN useradd -m myuser
+USER myuser
+
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "5004"]

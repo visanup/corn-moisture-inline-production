@@ -1,0 +1,20 @@
+# เอาโฟลเดอร์ node_modules ที่ติดตั้งบนโฮสต์ทิ้ง
+node_modules
+
+# ถ้า React build แล้วจะมีโฟลเดอร์ build/ หรือ dist/
+build
+dist
+
+# เอาไฟล์ env ทั้งหมด (ในกรณีไม่อยากให้ใส่ลง image)
+#.env
+#.env.* 
+
+# เอา log, cache, OS-specific files ทั่วไป
+npm-debug.log*
+yarn-error.log*
+.yarn/*
+.DS_Store
+
+# (ไม่ควร) ไม่ต้อง ignore
+# yarn.lock      ← ต้องเอาเข้า context เพื่อให้ Docker build ใช้ในการติดตั้ง dependencies
+# README.md      ← ไมได้เป็นไฟล์ลับ และขนาดไม่ใหญ่มาก จะช่วยให้ image มีข้อมูลไว้ดูด้วย
